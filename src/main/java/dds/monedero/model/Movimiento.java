@@ -42,4 +42,7 @@ public class Movimiento {
   public boolean isExtraccion() {
     return !esDeposito;
   }
+  public boolean esExtraccionDeFecha(LocalDate fecha){
+    return !this.isDeposito() && this.getFecha().equals(fecha);
+  }
 }

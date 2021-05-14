@@ -55,7 +55,7 @@ public class Cuenta {
   public void poner(double cuanto) {
     validarMontoNegativo(cuanto);
     validarCantidadDepositosMaximos();
-    this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, false));
+    this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, true));
     saldo += cuanto;
   }
 
@@ -73,7 +73,7 @@ public class Cuenta {
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> movimiento.esExtraccionDeFecha(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }

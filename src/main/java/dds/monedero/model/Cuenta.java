@@ -55,14 +55,16 @@ public class Cuenta {
   public void poner(double cuanto) {
     validarMontoNegativo(cuanto);
     validarCantidadDepositosMaximos();
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, false));
+    saldo += cuanto;
   }
 
   public void sacar(double cuanto) {
     validarMontoNegativo(cuanto);
     validarLimiteExtraccion(cuanto);
     excedeLimite(cuanto);
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, false));
+    saldo -= cuanto;
   }
 
   public void agregarMovimiento(Movimiento movimiento) {

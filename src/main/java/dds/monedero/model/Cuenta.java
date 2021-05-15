@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Cuenta {
 
-  private double saldo = 0;
+  private double saldo;
   private List<Movimiento> movimientos = new ArrayList<>();
 
   public Cuenta() {
@@ -52,18 +52,18 @@ public class Cuenta {
     }
   }
 
-  public void poner(double cuanto) {
+  public void hacerOperacion(double cuanto, boolean esDeposito, Runnable validaciones){
     validarMontoNegativo(cuanto);
-    validarCantidadDepositosMaximos();
-    this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, true));
+    validaciones.run();
+    this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, esDeposito));
+  }
+  public void poner(double cuanto) {
+    hacerOperacion(cuanto, true, () -> validarCantidadDepositosMaximos());
     saldo += cuanto;
   }
 
   public void sacar(double cuanto) {
-    validarMontoNegativo(cuanto);
-    validarLimiteExtraccion(cuanto);
-    excedeLimite(cuanto);
-    this.agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, false));
+    hacerOperacion(cuanto, false, () -> {validarLimiteExtraccion(cuanto); excedeLimite(cuanto);});
     saldo -= cuanto;
   }
 
